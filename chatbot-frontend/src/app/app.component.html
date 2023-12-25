@@ -1,0 +1,22 @@
+<div class="chat-container">
+  <h1>Welcome to Chat</h1>
+  <div class="conversation-view">
+    <div *ngFor="let message of conversation" [ngClass]="{'message': true, 'user-message': message.sender === 'user', 'bot-message': message.sender === 'assistant'}">
+      <div class="message-content">
+        <img *ngIf="message.sender === 'assistant'" src="assets/images/assistant.jpeg" class="profile-pic assistant-pic">
+        <div class="message-text">
+          <span>{{ message.text }}</span>
+        </div>
+        <img *ngIf="message.sender === 'user'" src="assets/images/user.jpeg" class="profile-pic user-pic">
+      </div>
+      <!-- Optional sentiment score -->
+      <div *ngIf="message.sender === 'user' && message.sentiment_score !== undefined" class="sentiment-score">
+        Sentiment: {{message.sentiment}} {{ message.sentiment_score | number:'1.0-1' }}
+      </div>
+    </div>
+  </div>
+  <div class="message-input">
+    <input type="text" [(ngModel)]="userMessage" (keyup.enter)="sendMessage()" placeholder="Type a message...">
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>
