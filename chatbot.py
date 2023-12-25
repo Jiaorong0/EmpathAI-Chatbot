@@ -11,14 +11,14 @@ CORS(app)
 load_dotenv()
 
 # Database setup
-def init_db():
-    conn = sqlite3.connect('chatbot.db')
-    c = conn.cursor()
-    c.execute('''CREATE TABLE IF NOT EXISTS chat_history (user_id TEXT, prompt TEXT, response TEXT)''')
-    conn.commit()
-    conn.close()
-
-init_db()
+# def init_db():
+#     conn = sqlite3.connect('chatbot.db')
+#     c = conn.cursor()
+#     c.execute('''CREATE TABLE IF NOT EXISTS chat_history (user_id TEXT, prompt TEXT, response TEXT)''')
+#     conn.commit()
+#     conn.close()
+#
+# init_db()
 
 my_api_key = os.environ.get('OPENAI_API_KEY')
 
@@ -59,18 +59,18 @@ def chat_with_openai(user_id, conversation):
         empathetic_prefix = "The user clearly feels very sad, tell him he should take a hot bubble bath."
         sentiment = "Very Unhappy"
 
-    conn = sqlite3.connect('chatbot.db')
-    c = conn.cursor()
-    c.execute("SELECT response FROM chat_history WHERE user_id = ?", (user_id,))
-    past_conversation = [row[0] for row in c.fetchall()]
-    conn.close()
+    # conn = sqlite3.connect('chatbot.db')
+    # c = conn.cursor()
+    # c.execute("SELECT response FROM chat_history WHERE user_id = ?", (user_id,))
+    # past_conversation = [row[0] for row in c.fetchall()]
+    # conn.close()
     messages = []
     if len(conversation) <= 1:
         messages.append({
             'role': 'system',
             'content': 'You are a helpful assistant.'
         })
-    messages.extend([{'role': 'assistant', 'content': message} for message in past_conversation])
+    # messages.extend([{'role': 'assistant', 'content': message} for message in past_conversation])
     for message in conversation:
         print(message['sender'], message['text'])
         messages.append({
@@ -98,11 +98,11 @@ def chat_with_openai(user_id, conversation):
         result = response.json()
         chat_response = result['choices'][0]['message']['content']
 
-        conn = sqlite3.connect('chatbot.db')
-        c = conn.cursor()
-        c.execute("INSERT INTO chat_history (user_id, prompt, response) VALUES (?, ?, ?)", (user_id, user_prompt['text'], chat_response))
-        conn.commit()
-        conn.close()
+        # conn = sqlite3.connect('chatbot.db')
+        # c = conn.cursor()
+        # c.execute("INSERT INTO chat_history (user_id, prompt, response) VALUES (?, ?, ?)", (user_id, user_prompt['text'], chat_response))
+        # conn.commit()
+        # conn.close()
 
         return chat_response, sentiment_score, sentiment
     else:
